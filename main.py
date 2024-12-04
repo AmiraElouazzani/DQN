@@ -37,15 +37,48 @@ def train(agent, env, replay_buffer, num_episodes):
 
         print(f"Episode {episode + 1}, Total Reward: {total_reward}, Epsilon: {epsilon}")
 
-# def evaluate():
+def evaluate(agent, env, num_episodes=1):
+    total_rewards = []
+    epsilon = 0.0  # No exploration during evaluation
+
+    for episode in range(num_episodes):
+        state, info = env.reset()
+        state = torch.tensor(state, dtype=torch.float32)
+        done = False
+        truncated = False
+        episode_reward = 0
+
+        while not (done or truncated):
+            env.render()  # Render the environment to visualize the agent's actions
+            action = agent.select_action(state, epsilon)  # Greedy action selection
+            next_state, reward, done, truncated, info = env.step(action)
+            next_state = torch.tensor(next_state, dtype=torch.float32)
+
+            state = next_state
+            episode_reward += reward
+        
+        total_rewards.append(episode_reward)
+        print(f"Evaluation Episode {episode + 1}: Total Reward = {episode_reward}")
+
+    avg_reward = sum(total_rewards) / num_episodes
+    print(f"\nAverage Reward over {num_episodes} Evaluation Episodes: {avg_reward}")
+    env.close()
+    return avg_reward
 
 
 # def parse_arguments():
             
-
 if __name__ == "__main__":
-    env = gym.make("LunarLander-v2")
+    env = gym.make("LunarLander-v2", render_mode="human")  # Specify render_mode
     replay_buffer = ReplayBuffer(capacity=10000)
     agent = DQNAgent(state_dim=8, action_dim=4, replay_buffer=replay_buffer)
-     # Run the training
-    train(agent, env, replay_buffer, num_episodes=773)
+    
+    # Train the agent
+    train(agent, env, replay_buffer, num_episodes=1000)
+
+    # Save the model after training
+    save_model(agent, "trained_model.pth")
+
+    # Load and evaluate the trained model
+    load_model(agent, "trained_model.pth")
+    avg_reward = evaluate(agent, env, num_episodes=1)  # Play and render one episode
