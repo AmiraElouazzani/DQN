@@ -70,7 +70,7 @@ def evaluate(agent, env, num_episodes=1):
 
 
 if __name__ == "__main__":
-    env = gym.make("LunarLander-v2", render_mode="human")  # Specify render_mode
+    env = gym.make("LunarLander-v3", render_mode="human")  # Specify render_mode
     replay_buffer = ReplayBuffer(capacity=10000)
     agent = DQNAgent(state_dim=8, action_dim=4, replay_buffer=replay_buffer)
     
