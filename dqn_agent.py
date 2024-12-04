@@ -28,9 +28,9 @@ class DQNAgent:
     def optimize_model(self, batch_size, gamma=0.99):
         # Get the batch from the replay buffer instance
         batch = self.replay_buffer.sample(batch_size)
-        
+
         QValues = self.q_network(batch[0])  # Predicted Q-values for all actions
-        Actions = torch.reshape(batch[1], [batch_size, 1]) 
+        Actions = torch.reshape(batch[1], [batch_size, 1])
         PredictedQValues = QValues.gather(1, Actions).squeeze(1)  # Shape [batch_size]
 
         #max Q-value for the next states using the target network
@@ -55,7 +55,7 @@ class DQNAgent:
         # Convert state to tensor if it's not already
         if isinstance(state, np.ndarray):
             state = torch.tensor(state, dtype=torch.float32)
-        
+
         if torch.rand(1).item() < epsilon:
             return np.random.randint(0, self.action_dim)
         else:

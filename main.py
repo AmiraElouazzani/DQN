@@ -1,5 +1,5 @@
-import gymnasium as gym  
-import torch         
+import gymnasium as gym
+import torch
 from dqn_agent import DQNAgent
 from replay_buffer import ReplayBuffer
 from utils import plot_metrics, save_model, load_model , epsilon_decay_schedule # Optional utility functions
@@ -26,12 +26,12 @@ def train(agent, env, replay_buffer, num_episodes):
             replay_buffer.push(state, action, reward, next_state, done)
             state = next_state
             total_reward += reward
-            
+
             if len(replay_buffer) > batch_size * 50:
                 agent.optimize_model(batch_size, gamma=0.99)
 
         epsilon = epsilon_decay_schedule(epsilon, epsilon_min, epsilon_decay)
-        
+
         if episode % target_update_freq == 0:
             agent.update_target_network()
 
@@ -67,7 +67,8 @@ def evaluate(agent, env, num_episodes=1):
 
 
 # def parse_arguments():
-            
+
+
 if __name__ == "__main__":
     env = gym.make("LunarLander-v2", render_mode="human")  # Specify render_mode
     replay_buffer = ReplayBuffer(capacity=10000)
