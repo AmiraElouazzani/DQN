@@ -1,13 +1,10 @@
 import torch
-import torch.nn as nn  # Neural network layers and architecture
-import torch.optim as optim  # Optimization
-import torch.nn.functional as F  # Loss functions like smooth L1
-import numpy as np  # Handling numerical operations
+import torch.nn as nn 
+import torch.optim as optim  
+import torch.nn.functional as F  
+import numpy as np  
 import random
-
-from replay_buffer import ReplayBuffer   # To access replay buffer within the agent
-from network import QNetwork  # To use the neural network as Q-function approximator
-
+from network import QNetwork 
 
 class DQNAgent:
     def __init__(self, state_dim, action_dim, replay_buffer):
@@ -26,7 +23,7 @@ class DQNAgent:
                 return self.q_network(state).argmax().item()
 
     def optimize_model(self, batch_size, gamma=0.99):
-        # Get the batch from the replay buffer instance
+        #Get the batch from the replay buffer instance
         batch = self.replay_buffer.sample(batch_size)
 
         QValues = self.q_network(batch[0])  # Predicted Q-values for all actions
@@ -52,7 +49,6 @@ class DQNAgent:
         self.optimizer.step()
 
     def select_action(self, state, epsilon):
-        # Convert state to tensor if it's not already
         if isinstance(state, np.ndarray):
             state = torch.tensor(state, dtype=torch.float32)
 

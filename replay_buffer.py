@@ -15,13 +15,12 @@ class ReplayBuffer:
         if isinstance(next_state, np.ndarray):
             next_state = torch.tensor(next_state, dtype=torch.float32)
 
-        # Append experience to buffer
+        # experience to buffer
         if len(self.buffer) >= self.capacity:
             self.buffer = deque(maxlen=self.capacity)
         self.buffer.append((state, action, reward, next_state, done))
 
     def sample(self, batch_size):
-        # Sample a batch of experiences from the buffer
         experiences = random.sample(self.buffer, batch_size)
 
         # Unpack experiences + convert each component to a tensor
