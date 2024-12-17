@@ -108,3 +108,4 @@ After training for **2,000 episodes**, the agent typically converges to stable s
 ### **3. Playing**
    python3 play.py
 
+This project was created by **Amira Elouazzani** and **Casper De With**
