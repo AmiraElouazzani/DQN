@@ -1,7 +1,5 @@
 import torch
-import torch.nn as nn 
 import torch.optim as optim  
-import torch.nn.functional as F  
 import numpy as np  
 import random
 from network import QNetwork 
@@ -23,9 +21,7 @@ class DQNAgent:
                 return self.q_network(state).argmax().item()
 
     def optimize_model(self, batch_size, gamma=0.99):
-        #Get the batch from the replay buffer instance
         batch = self.replay_buffer.sample(batch_size)
-
         QValues = self.q_network(batch[0])  # Predicted Q-values for all actions
         Actions = torch.reshape(batch[1], [batch_size, 1])
         PredictedQValues = QValues.gather(1, Actions).squeeze(1)  # Shape [batch_size]
